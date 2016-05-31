@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    caddie (0.0.1)
+    caddie (0.0.5)
+      pg
       rails (~> 4.2.4)
 
 GEM

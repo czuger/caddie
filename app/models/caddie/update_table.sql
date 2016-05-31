@@ -37,3 +37,4 @@ WHERE nb_days <= 30 AND nb_days > 7;
 UPDATE caddie_crest_price_history_updates cphu
 SET process_queue = 'MONTHLY', next_process_date = date_trunc( 'month', ( current_date + ( interval '1 month' ) ) ), process_queue_priority = 3
 WHERE nb_days > 30 OR nb_days IS NULL;
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160524122651) do
+ActiveRecord::Schema.define(version: 20160527152027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20160524122651) do
     t.date     "next_process_date"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.integer  "thread_slice_id"
   end
 
   add_index "caddie_crest_price_history_updates", ["eve_item_id", "region_id"], name: "index_caddie_cphu_on_eve_item_id_and_region_id", unique: true, using: :btree

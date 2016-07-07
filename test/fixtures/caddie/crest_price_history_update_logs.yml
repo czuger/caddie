@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  feed_date: 2016-07-07
+  update_planning_time: 1
+  feeding_time: 1
+
+two:
+  feed_date: 2016-07-07
+  update_planning_time: 1
+  feeding_time: 1

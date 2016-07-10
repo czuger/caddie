@@ -6,7 +6,8 @@ module Caddie
     CREST_BASE_URL='https://crest-tq.eveonline.com/'
 
     def get_markets( region_id, type_id )
-      items, connections_count = get_multipage_data( "market/#{region_id}/types/#{type_id}/history", false )
+      type_url = "https://crest-tq.eveonline.com/inventory/types/#{type_id}"
+      items, connections_count = get_multipage_data( "market/#{region_id}/history/?type=#{type_url}", false )
       [ items, connections_count ]
     end
 

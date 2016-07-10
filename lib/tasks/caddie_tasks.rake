@@ -19,8 +19,8 @@ namespace :caddie do
     end_feeding_time = Time.now
     feeding_time = end_feeding_time - end_update_time
 
-    Caddie::CrestPriceHistoryUpdateLog.create!(
-      feed_date: feed_date, update_planning_time: update_planning_time, feeding_time: feeding_time )
+    Caddie::CrestPriceHistoryUpdateLog.create!( feed_date: feed_date, update_planning_time: update_planning_time,
+       feeding_time: feeding_time, total_inserts: total_inserts, co_seconds: total_connections.to_f / total_time )
 
   end
 end

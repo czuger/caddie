@@ -27,14 +27,14 @@ UPDATE caddie_crest_price_history_updates cphu SET max_date = GREATEST( max_upda
 UPDATE caddie_crest_price_history_updates cphu SET nb_days = ( CURRENT_DATE - max_date );
 
 UPDATE caddie_crest_price_history_updates cphu
-SET process_queue = 'DAILY', next_process_date = current_date, process_queue_priority = 1
+SET process_queue = 'DAILY', next_process_date = current_date, process_queue_priority = 1, updated_at = localtimestamp
 WHERE nb_days <= 7;
 
 UPDATE caddie_crest_price_history_updates cphu
-SET process_queue = 'WEEKLY', next_process_date = date_trunc( 'week', ( current_date + ( interval '1 week' ) ) ), process_queue_priority = 2
+SET process_queue = 'WEEKLY', next_process_date = date_trunc( 'week', ( current_date + ( interval '1 week' ) ) ), process_queue_priority = 2, updated_at = localtimestamp
 WHERE nb_days <= 30 AND nb_days > 7;
 
 UPDATE caddie_crest_price_history_updates cphu
-SET process_queue = 'MONTHLY', next_process_date = date_trunc( 'month', ( current_date + ( interval '1 month' ) ) ), process_queue_priority = 3
+SET process_queue = 'MONTHLY', next_process_date = date_trunc( 'month', ( current_date + ( interval '1 month' ) ) ), process_queue_priority = 3, updated_at = localtimestamp
 WHERE nb_days > 30 OR nb_days IS NULL;
 

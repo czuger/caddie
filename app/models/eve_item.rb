@@ -1,1 +1,0 @@
-../../../eve_business_server/app/models/eve_item.rb

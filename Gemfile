@@ -14,3 +14,8 @@ gemspec
 # gem 'byebug', group: [:development, :test]
 
 gem 'pg'
+
+group :development, :test do
+  gem "factory_girl_rails", "~> 4.0"
+  gem 'mocha'
+end

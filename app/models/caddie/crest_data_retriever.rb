@@ -7,7 +7,7 @@ module Caddie
 
     def get_markets( region_id, type_id )
 
-      debug = ENV[ 'CADDIE_DEBUG_MODE' ] && ENV[ 'CADDIE_DEBUG_MODE' ].downcase == 'true'
+      debug = ENV[ 'EBS_DEBUG_MODE' ] && ENV[ 'EBS_DEBUG_MODE' ].downcase == 'true'
 
       type_url = "https://crest-tq.eveonline.com/inventory/types/#{type_id}"
       items, connections_count = get_multipage_data( "market/#{region_id}/history/?type=#{type_url}", debug )

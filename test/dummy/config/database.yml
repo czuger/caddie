@@ -9,11 +9,11 @@ default: &default
   timeout: 5000
   adapter: postgresql
   encoding: unicode
-  username: eve_business_server
+  username: caddie
 
 development:
   <<: *default
-  database: eve_business_server_dev
+  database: caddie_dev
 
 
 # Warning: The database defined as "test" will be erased and
@@ -21,4 +21,4 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: eve_business_server_test
+  database: caddie_test

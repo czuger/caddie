@@ -19,3 +19,13 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
   ActiveSupport::TestCase.fixtures :all
 end
+
+class ActiveSupport::TestCase
+  include FactoryGirl::Syntax::Methods
+end
+
+ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
+Dir[File.join(ENGINE_RAILS_ROOT, "test/factories/**/*.rb")].each {|f| require f }
+
+require 'minitest/unit'
+require 'mocha/mini_test'

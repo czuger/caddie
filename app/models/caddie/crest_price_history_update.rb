@@ -33,7 +33,21 @@ module Caddie
 
         eve_item_id, region_id, cpp_eve_item_id, cpp_region_id = row
         # puts "Requesting : #{cpp_region_id}, #{cpp_eve_item_id}"
-        items, connections_count = get_markets( cpp_region_id, cpp_eve_item_id )
+
+        items = []
+        connections_count = 0
+        http_errors = 0
+        # We retry 2 times
+        while http_errors <= 2
+          begin
+            items, connections_count = get_markets( cpp_region_id, cpp_eve_item_id )
+          rescue OpenURI::HTTPError => e
+            http_errors += 1
+            puts e.inspect
+            sleep( 5 ) # in case of an error, we don't retry immediately.
+          end
+        end
+
         total_connections_counts += connections_count
 
         ActiveRecord::Base.transaction do

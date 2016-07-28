@@ -30,6 +30,7 @@ class Caddie::MThreadedUpdater
   end
 
   def split_work_for_threads
+    puts 'Start splitting work for threads'
     ids = @daily_operations_list.pluck( :id )
     ActiveRecord::Base.transaction do
       slice_size = ids.count/@max_threads + 1
@@ -38,6 +39,7 @@ class Caddie::MThreadedUpdater
         @daily_operations_list.where( id: ids_slice ).update_all( thread_slice_id: thread_id )
       end
     end
+    puts 'Finished splitting work for threads'
   end
 
 end

@@ -30,7 +30,7 @@ class EveItem < ActiveRecord::Base
   end
 
   def self.used_items
-    used_items, dummy = User.get_used_items_and_trade_hubs
+    used_items, _ = User.get_used_items_and_trade_hubs
     used_items
   end
 

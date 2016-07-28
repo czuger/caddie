@@ -16,18 +16,6 @@ module Caddie
       ActiveRecord::Base.connection.execute( request )
     end
 
-    def self.feed_price_histories_threaded
-
-      Thread::abort_on_exception = true
-      thread_runner = Caddie::MThreadedUpdater.new( NB_THREADS, daily_operations_list )
-      thread_runner.split_work_for_threads
-
-      thread_runner.run_threaded do |thread_id|
-        Thread.current[:timings] = feed_price_histories( thread_id )
-      end
-
-    end
-
     def self.feed_price_histories( thread_id = nil )
       total_connections_counts = 0
       total_inserts = 0
@@ -35,10 +23,10 @@ module Caddie
 
       dol = daily_operations_list
 
-      pp dol.to_a
+      # pp dol.to_a
       dol = dol.where( thread_slice_id: thread_id ) if thread_id
 
-      puts dol.reload.count
+      # puts dol.reload.count
       dol.joins( :eve_item, :region ).pluck( :eve_item_id, :region_id, :cpp_eve_item_id, :cpp_region_id ).each do |row|
 
         # puts "Processing row = #{row}"

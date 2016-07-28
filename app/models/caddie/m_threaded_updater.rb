@@ -1,4 +1,5 @@
 require 'thwait'
+require 'matrix'
 
 class Caddie::MThreadedUpdater
 
@@ -10,12 +11,13 @@ class Caddie::MThreadedUpdater
     @daily_operations_list = daily_operations_list
   end
 
-  def run_threaded
+  def feed_price_histories_threaded
+    Thread::abort_on_exception = true
     threads = []
     0.upto( @max_threads-1 ).each do |thread_id|
       threads << Thread.new {
-        puts Caddie::CrestPriceHistoryUpdate.daily_operations_list.reload.count
-        yield thread_id
+        puts Thread.inspect
+        Thread.current[:timings] = Caddie::CrestPriceHistoryUpdate.feed_price_histories( thread_id )
       }
     end
     result = []
@@ -23,7 +25,8 @@ class Caddie::MThreadedUpdater
       thread_result = t[:timings]
       result << thread_result
     end
-    result
+    tmp = result.map { |a| Vector[*a] }.inject(:+)
+    tmp.to_a
   end
 
   def split_work_for_threads

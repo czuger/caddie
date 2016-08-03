@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160725091214) do
+ActiveRecord::Schema.define(version: 20160803094530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "caddie_crest_price_history_last_day_timestamps", force: :cascade do |t|
+    t.integer  "eve_item_id"
+    t.integer  "region_id"
+    t.datetime "day_timestamp"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "caddie_crest_price_history_last_day_timestamps", ["region_id", "eve_item_id"], name: "index_caddie_crest_price_history_last_day_timestamps", unique: true, using: :btree
 
   create_table "caddie_crest_price_history_update_logs", force: :cascade do |t|
     t.date     "feed_date"
@@ -93,6 +103,8 @@ ActiveRecord::Schema.define(version: 20160725091214) do
 
   add_index "regions", ["cpp_region_id"], name: "index_regions_on_cpp_region_id", unique: true, using: :btree
 
+  add_foreign_key "caddie_crest_price_history_last_day_timestamps", "eve_items"
+  add_foreign_key "caddie_crest_price_history_last_day_timestamps", "regions"
   add_foreign_key "caddie_crest_price_history_updates", "eve_items"
   add_foreign_key "caddie_crest_price_history_updates", "regions"
   add_foreign_key "crest_price_histories", "eve_items"

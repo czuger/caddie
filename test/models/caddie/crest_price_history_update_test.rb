@@ -5,6 +5,11 @@ module Caddie
 
     def setup
       Caddie::CrestPriceHistoryUpdate.stubs( :get_multipage_data ).returns( [ [], 5 ] )
+      raise 'daily_operation_list = 0. You may recreate fixtures for today by running "RAILS_ENV=test rake app:caddie:create_fixtures_files"' if Caddie::CrestPriceHistoryUpdate.daily_operations_list.count == 0
+    end
+
+    teardown do
+      Caddie::CrestPriceHistoryUpdate.unstub(:get_multipage_data)
     end
 
     test 'test update for new item' do

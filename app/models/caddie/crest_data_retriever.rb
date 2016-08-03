@@ -30,8 +30,8 @@ module Caddie
 
         puts "Fetching : #{next_url}" if debug_request
 
-        @start_time = Time.now unless @start_time
-        @hit_count = 0 unless @hit_count
+        @start_time ||= Time.now
+        @hit_count ||= 0
         @hit_count += 1
 
         json_result = open( next_url ).read

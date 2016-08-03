@@ -30,6 +30,9 @@ module Caddie
         dol = daily_operations_list
       end
 
+      puts "dol.count = #{dol.count}" if debug
+
+      global_errors_count = 0
       dol.joins( :eve_item, :region ).pluck( :eve_item_id, :region_id, :cpp_eve_item_id, :cpp_region_id, :id ).each do |row|
 
         eve_item_id, region_id, cpp_eve_item_id, cpp_region_id = row
@@ -44,7 +47,8 @@ module Caddie
             items, connections_count = get_markets( cpp_region_id, cpp_eve_item_id )
           rescue OpenURI::HTTPError => e
             http_errors += 1
-            puts e.inspect
+            global_errors_count += 1
+            STDERR.puts "#{e.message} for cpp_region_id = #{cpp_region_id} and cpp_eve_item_id = #{cpp_eve_item_id}"
             sleep( 5 ) # in case of an error, we don't retry immediately.
           end
         end while http_errors >= 1 && http_errors < 2
@@ -53,19 +57,15 @@ module Caddie
 
         ActiveRecord::Base.transaction do
 
-          # TODO : This operation is extremely costly. Keep the last updated timestamp and use it to shorten insert.
-          # puts 'About to reject already used lines'
-          timestamps = CrestPriceHistory.where( region_id: region_id, eve_item_id: eve_item_id ).pluck( :day_timestamp ).to_set
-          items.reject! do |item|
-            date_info = DateTime.parse( item['date'] )
-            date_info_ts = date_info.strftime( '%Y%m%d' )
-            timestamps.include?( date_info_ts )
-          end
-          # puts 'Lines rejected'
+          last_update_record = CrestPriceHistoryLastDayTimestamp.find_by_region_id_and_eve_item_id( region_id, eve_item_id )
+          last_update_date = last_update_record ? last_update_record.day_timestamp : Time.new( 0 )
 
+          items.reject!{ |item| DateTime.parse( item['date'] ) < last_update_date }
+
+          max_date_info = Time.new(0)
           items.each do |item_data|
-
             date_info = DateTime.parse( item_data['date'] )
+            max_date_info = [ max_date_info, date_info ].max
             date_info_ts = date_info.strftime( '%Y%m%d' )
 
             CrestPriceHistory.create!( region_id: region_id, eve_item_id: eve_item_id, day_timestamp: date_info_ts,
@@ -73,9 +73,15 @@ module Caddie
               low_price: item_data['lowPrice'], avg_price: item_data['avgPrice'], high_price: item_data['highPrice'] )
               total_inserts += 1
           end
+
+          if last_update_record
+            last_update_record.update!( day_timestamp: max_date_info )
+          else
+            CrestPriceHistoryLastDayTimestamp.create!( region_id: region_id, eve_item_id: eve_item_id, day_timestamp: max_date_info )
+          end
         end
       end
-      [ total_inserts, total_connections_counts, Time.now - date_deb ]
+      [ total_inserts, total_connections_counts, Time.now - date_deb, global_errors_count ]
     end
 
     private

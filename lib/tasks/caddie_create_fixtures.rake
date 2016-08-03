@@ -1,5 +1,5 @@
+require 'factory_girl'
 include FactoryGirl::Syntax::Methods
-
 
 require_relative '../../test/dummy/app/models/region'
 require_relative '../../test/dummy/app/models/eve_item'

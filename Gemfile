@@ -21,4 +21,5 @@ end
 
 group :test do
   gem 'mocha'
+  gem 'simplecov', :require => false, :group => :test
 end

@@ -1,6 +1,12 @@
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'dummy'
+  add_filter 'factories'
+end
+
 require File.expand_path("../../test/dummy/config/environment.rb",  __FILE__)
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', __FILE__)
@@ -27,5 +33,4 @@ end
 ENGINE_RAILS_ROOT=File.join(File.dirname(__FILE__), '../')
 Dir[File.join(ENGINE_RAILS_ROOT, "test/factories/**/*.rb")].each {|f| require f }
 
-require 'minitest/unit'
-require 'mocha/mini_test'
+require 'mocha/test_unit'

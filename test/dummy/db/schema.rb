@@ -76,12 +76,13 @@ ActiveRecord::Schema.define(version: 20160725091214) do
     t.datetime "updated_at"
     t.string   "name_lowcase"
     t.float    "cost"
-    t.integer  "cpp_market_group_id"
+    t.boolean  "epic_blueprint",        default: false
     t.boolean  "involved_in_blueprint", default: false
+    t.integer  "market_group_id"
   end
 
   add_index "eve_items", ["cpp_eve_item_id"], name: "index_eve_items_on_cpp_eve_item_id", using: :btree
-  add_index "eve_items", ["cpp_market_group_id"], name: "index_eve_items_on_cpp_market_group_id", using: :btree
+  add_index "eve_items", ["market_group_id"], name: "index_eve_items_on_market_group_id", using: :btree
 
   create_table "regions", force: :cascade do |t|
     t.string   "cpp_region_id", null: false

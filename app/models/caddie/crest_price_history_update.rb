@@ -1,4 +1,5 @@
 require 'set'
+require 'open-uri'
 
 module Caddie
 
@@ -16,29 +17,29 @@ module Caddie
       ActiveRecord::Base.connection.execute( request )
     end
 
-    def self.feed_price_histories( thread_id = nil )
+    def self.feed_price_histories( updates_ids = nil )
       total_connections_counts = 0
       total_inserts = 0
       date_deb = Time.now
 
-      dol = daily_operations_list
+      debug = ENV[ 'EBS_DEBUG_MODE' ] && ENV[ 'EBS_DEBUG_MODE' ].downcase == 'true'
 
-      # pp dol.to_a
-      dol = dol.where( thread_slice_id: thread_id ) if thread_id
+      if updates_ids
+        dol = self.where( id: updates_ids ).order( :process_queue_priority ) if updates_ids
+      else
+        dol = daily_operations_list
+      end
 
-      # puts dol.reload.count
-      dol.joins( :eve_item, :region ).pluck( :eve_item_id, :region_id, :cpp_eve_item_id, :cpp_region_id ).each do |row|
-
-        # puts "Processing row = #{row}"
+      dol.joins( :eve_item, :region ).pluck( :eve_item_id, :region_id, :cpp_eve_item_id, :cpp_region_id, :id ).each do |row|
 
         eve_item_id, region_id, cpp_eve_item_id, cpp_region_id = row
-        # puts "Requesting : #{cpp_region_id}, #{cpp_eve_item_id}"
+        puts "Requesting : cpp_region_id = #{cpp_region_id}, cpp_eve_item_id = #{cpp_eve_item_id}" if debug
 
         items = []
         connections_count = 0
         http_errors = 0
         # We retry 2 times
-        while http_errors <= 2
+        begin
           begin
             items, connections_count = get_markets( cpp_region_id, cpp_eve_item_id )
           rescue OpenURI::HTTPError => e
@@ -46,7 +47,7 @@ module Caddie
             puts e.inspect
             sleep( 5 ) # in case of an error, we don't retry immediately.
           end
-        end
+        end while http_errors >= 1 && http_errors < 2
 
         total_connections_counts += connections_count
 

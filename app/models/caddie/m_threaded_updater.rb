@@ -12,12 +12,12 @@ class Caddie::MThreadedUpdater
   end
 
   def feed_price_histories_threaded
+    split_work_for_threads
     Thread::abort_on_exception = true
     threads = []
     0.upto( @max_threads-1 ).each do |thread_id|
       threads << Thread.new {
-        puts Thread.inspect
-        Thread.current[:timings] = Caddie::CrestPriceHistoryUpdate.feed_price_histories( thread_id )
+        Thread.current[:timings] = Caddie::CrestPriceHistoryUpdate.feed_price_histories( @threads_split[ thread_id ] )
       }
     end
     result = []
@@ -32,12 +32,11 @@ class Caddie::MThreadedUpdater
   def split_work_for_threads
     puts 'Start splitting work for threads'
     ids = @daily_operations_list.pluck( :id )
-    ActiveRecord::Base.transaction do
-      slice_size = ids.count/@max_threads + 1
-      ( 0 ... @max_threads ).each do |thread_id|
-        ids_slice = ids.shift( slice_size )
-        @daily_operations_list.where( id: ids_slice ).update_all( thread_slice_id: thread_id )
-      end
+    @threads_split = []
+
+    slice_size = ids.count/@max_threads + 1
+    ( 0 ... @max_threads ).each do |thread_id|
+      @threads_split[ thread_id ] = ids.shift( slice_size )
     end
     puts 'Finished splitting work for threads'
   end

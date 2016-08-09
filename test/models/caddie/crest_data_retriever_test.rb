@@ -4,10 +4,10 @@ module Caddie
   class CrestDataRetrieverTest < ActiveSupport::TestCase
 
     def setup
+      create( :crest_price_history_update )
 
       Object.stubs( :read ).returns( { items: [ 'item_test' ] }.to_json )
       Caddie::CrestPriceHistoryUpdate.stubs( :open ).returns( Object )
-
     end
 
     test 'get_multipage_data' do
@@ -22,7 +22,7 @@ module Caddie
       Caddie::CrestPriceHistoryUpdate.stubs(:sleep)
 
       result = Caddie::CrestPriceHistoryUpdate.feed_price_histories
-      assert_equal 53*2, result[3]
+      assert_equal 2, result[3]
 
       Caddie::CrestPriceHistoryUpdate.unstub(:sleep)
     end

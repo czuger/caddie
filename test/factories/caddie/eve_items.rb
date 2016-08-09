@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :caddie_eve_item, class: EveItem do
+  factory :eve_item, class: EveItem do
     cost 5
     involved_in_blueprint true
 

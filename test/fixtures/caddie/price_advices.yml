@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  eve_item_id: 
+  trade_hub_id: 
+  vol_month: 1
+  vol_day: 1
+  cost: 1.5
+  price: 1.5
+  margin_pcent: 1.5
+  margin_isk: 1.5
+  margin_batch: 1
+  daily_monthly_pcent: 1.5
+
+two:
+  eve_item_id: 
+  trade_hub_id: 
+  vol_month: 1
+  vol_day: 1
+  cost: 1.5
+  price: 1.5
+  margin_pcent: 1.5
+  margin_isk: 1.5
+  margin_batch: 1
+  daily_monthly_pcent: 1.5

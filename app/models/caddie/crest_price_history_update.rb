@@ -13,7 +13,7 @@ module Caddie
 
     def self.update
       current_path = File.dirname( __FILE__ )
-      request = File.open( "#{current_path}/update_table.sql" ).read
+      request = File.open( "#{current_path}/update_caddie_crest_price_history_updates.sql" ).read
       ActiveRecord::Base.connection.execute( request )
     end
 

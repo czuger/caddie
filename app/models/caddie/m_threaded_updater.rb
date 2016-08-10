@@ -25,8 +25,9 @@ class Caddie::MThreadedUpdater
       thread_result = t[:timings]
       result << thread_result
     end
-    tmp = result.map { |a| Vector[*a] }.inject(:+)
-    tmp.to_a
+    results = result.map { |a| Vector[*a] }.inject(:+).to_a
+    results[ 2 ] = result.map{ |e| e[2] }.max # For timings we are using the max, not the sum.
+    results
   end
 
   def split_work_for_threads

@@ -5,12 +5,13 @@ module Caddie
 
     CREST_BASE_URL='https://crest-tq.eveonline.com/'
 
-    def get_markets( region_id, type_id )
+    def get_markets( region_id, type_id, thread_log_file: nil )
 
       debug = ENV[ 'EBS_DEBUG_MODE' ] && ENV[ 'EBS_DEBUG_MODE' ].downcase == 'true'
+      output = thread_log_file ? thread_log_file : STDERR
 
       type_url = "https://crest-tq.eveonline.com/inventory/types/#{type_id}"
-      items, connections_count = get_multipage_data( "market/#{region_id}/history/?type=#{type_url}", debug )
+      items, connections_count = get_multipage_data( "market/#{region_id}/history/?type=#{type_url}", debug, thread_log_file: thread_log_file )
 
       [ items, connections_count ]
     end
@@ -21,14 +22,16 @@ module Caddie
       "#{CREST_BASE_URL}/#{rest}/"
     end
 
-    def get_multipage_data( rest, debug_request = false )
+    def get_multipage_data( rest, debug_request = false, thread_log_file: nil )
+
+      output = thread_log_file ? thread_log_file : STDOUT
 
       next_url = get_crest_url( rest )
       items = []
       connections_count = 0
       begin
 
-        puts "Fetching : #{next_url}" if debug_request
+        output.puts "Fetching : #{next_url}" if debug_request
 
         @start_time ||= Time.now
         @hit_count ||= 0
@@ -46,7 +49,7 @@ module Caddie
 
       end while next_url
 
-      puts "items.count = #{items.count}" if debug_request
+      output.puts "Retrieved items.count = #{items.count}" if debug_request
 
       [ items, connections_count ]
     end

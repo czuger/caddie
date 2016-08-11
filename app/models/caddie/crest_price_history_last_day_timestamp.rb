@@ -5,8 +5,6 @@ module Caddie
 
     def self.find_or_create_last_day_timestamp( region_id, eve_item_id )
 
-      @debug = ENV[ 'EBS_DEBUG_MODE' ] && ENV[ 'EBS_DEBUG_MODE' ].downcase == 'true' && Rails.env != 'test'
-
       last_update_record = CrestPriceHistoryLastDayTimestamp.find_by_region_id_and_eve_item_id( region_id, eve_item_id )
 
       if last_update_record
@@ -17,7 +15,6 @@ module Caddie
 
       last_update_date = Time.new( 0 ) unless last_update_date
 
-      puts "Last update record = #{last_update_date.inspect}" if @debug
       [ last_update_date, last_update_record ]
     end
 

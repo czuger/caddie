@@ -17,7 +17,9 @@ class Caddie::MThreadedUpdater
     threads = []
     0.upto( @max_threads-1 ).each do |thread_id|
       threads << Thread.new {
-        Thread.current[:timings] = Caddie::CrestPriceHistoryUpdate.feed_price_histories( @threads_split[ thread_id ] )
+        thread_log = File.open( "log/feed_price_histories_threaded_#{thread_id}.log", 'w')
+        Thread.current[:timings] = Caddie::CrestPriceHistoryUpdate.
+          feed_price_histories( updates_ids: @threads_split[ thread_id ], thread_log_file: thread_log )
       }
     end
     result = []

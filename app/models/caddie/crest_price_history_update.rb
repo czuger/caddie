@@ -53,7 +53,7 @@ module Caddie
         begin
           begin
             items, connections_count = get_markets( cpp_region_id, cpp_eve_item_id, thread_log_file: thread_log_file )
-          rescue OpenURI::HTTPError, Errno::ECONNRESET => e
+          rescue => e
             http_errors += 1
             global_errors_count += 1
             outerr.puts "#{e.message} for cpp_region_id = #{cpp_region_id} and cpp_eve_item_id = #{cpp_eve_item_id}" unless Rails.env == 'test'

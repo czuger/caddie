@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    caddie (0.2.3)
-      mocha
+    caddie (0.2.4)
       pg (~> 0.18, >= 0.18.4)
       rails (~> 4.2, >= 4.2.6)
 

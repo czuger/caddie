@@ -19,5 +19,4 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'rails', '~> 4.2', '>= 4.2.6'
   s.add_runtime_dependency 'pg', '~> 0.18', '>= 0.18.4'
-  s.add_runtime_dependency 'mocha'
 end

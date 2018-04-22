@@ -13,8 +13,6 @@ gemspec
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem 'pg'
-
 group :development, :test do
   gem 'factory_bot_rails', '~> 4.0'
 end

@@ -1,5 +1,5 @@
 module Caddie
-  class CrestPriceHistoryLastDayTimestamp < ActiveRecord::Base
+  class CrestPriceHistoryLastDayTimestamp < ApplicationRecord
     belongs_to :eve_item
     belongs_to :region
 

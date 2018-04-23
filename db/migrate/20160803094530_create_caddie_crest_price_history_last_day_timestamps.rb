@@ -1,4 +1,4 @@
-class CreateCaddieCrestPriceHistoryLastDayTimestamps < ActiveRecord::Migration
+class CreateCaddieCrestPriceHistoryLastDayTimestamps < ActiveRecord::Migration[4.2]
   def change
     create_table :caddie_crest_price_history_last_day_timestamps do |t|
       t.references :eve_item, index: false, foreign_key: true

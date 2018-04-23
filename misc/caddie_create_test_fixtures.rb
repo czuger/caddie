@@ -33,7 +33,7 @@ def create_fixture( fixture_file, fixtures )
 end
 
 db_config = YAML::load(File.open( '../test/dummy/config/database.yml' ) )
-ActiveRecord::Base.establish_connection( db_config[ 'test' ] )
+ApplicationRecord.establish_connection( db_config[ 'test' ] )
 
 `RAILS_ENV=test rake db:reset`
 

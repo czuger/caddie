@@ -3,7 +3,7 @@ require 'open-uri'
 
 module Caddie
 
-  class CrestPriceHistoryUpdate < ActiveRecord::Base
+  class CrestPriceHistoryUpdate < Caddie::ApplicationRecord
     belongs_to :eve_item
     belongs_to :region
 
@@ -14,7 +14,7 @@ module Caddie
     def self.update
       current_path = File.dirname( __FILE__ )
       request = File.open( "#{current_path}/update_table.sql" ).read
-      ActiveRecord::Base.connection.execute( request )
+      ApplicationRecord.connection.execute( request )
     end
 
     def self.feed_price_histories( updates_ids: nil, thread_log_file: nil )
@@ -63,7 +63,7 @@ module Caddie
 
         total_connections_counts += connections_count
 
-        ActiveRecord::Base.transaction do
+        ApplicationRecord.transaction do
 
           last_update_date, last_update_record = Caddie::CrestPriceHistoryLastDayTimestamp.
             find_or_create_last_day_timestamp( region_id, eve_item_id )

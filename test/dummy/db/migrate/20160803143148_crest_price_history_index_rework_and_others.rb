@@ -1,4 +1,4 @@
-class CrestPriceHistoryIndexReworkAndOthers < ActiveRecord::Migration
+class CrestPriceHistoryIndexReworkAndOthers < ActiveRecord::Migration[4.2]
   def change
 
     remove_column :crest_price_histories, :day_timestamp

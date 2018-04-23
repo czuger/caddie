@@ -1,6 +1,6 @@
 require 'pp'
 
-class EveItem < ActiveRecord::Base
+class EveItem < ApplicationRecord
 
   has_and_belongs_to_many :users
   has_one :blueprint, dependent: :destroy

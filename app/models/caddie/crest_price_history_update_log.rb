@@ -1,5 +1,5 @@
 module Caddie
-  class CrestPriceHistoryUpdateLog < ActiveRecord::Base
+  class CrestPriceHistoryUpdateLog < ApplicationRecord
 
     def self.store_log_data( feed_date, update_planning_time, feeding_time, total_inserts, total_connections, total_time )
       log = Caddie::CrestPriceHistoryUpdateLog.where( feed_date: feed_date ).first_or_initialize

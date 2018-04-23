@@ -1,4 +1,4 @@
-class CreateCaddieCrestPriceHistoryUpdates < ActiveRecord::Migration
+class CreateCaddieCrestPriceHistoryUpdates < ActiveRecord::Migration[4.2]
 
   def change
     create_table :caddie_crest_price_history_updates do |t|
